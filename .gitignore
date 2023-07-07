@@ -2,9 +2,10 @@
 client_secret.json
 credentials.storage
 workflow.txt
-downloads
+temp
 output
 *.webm
 *.mp4
 *.png
+*.mp3
 prompt.txt
