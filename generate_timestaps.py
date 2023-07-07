@@ -4,6 +4,17 @@ import yt_dlp as youtube_dl
 import os
 import datetime
 
+def format_time(seconds):
+    # Convert seconds to timedelta
+    time = datetime.timedelta(seconds=seconds)
+
+    # If the time is less than 1 hour, format it as mm:ss
+    if time < datetime.timedelta(hours=1):
+        return f"{time.seconds // 60}:{time.seconds % 60:02d}"
+    # If the time is 1 hour or more, format it as hh:mm:ss
+    else:
+        return str(time)
+
 def main():
     file_path = 'input/input.txt'
     
@@ -39,18 +50,18 @@ def main():
         duration = clip.duration  # in seconds
 
         # Calculate the start and end time of each video
-        start_time_hh_mm_ss = str(datetime.timedelta(seconds=sum_durations))
-        end_time_hh_mm_ss = str(datetime.timedelta(seconds=(sum_durations + duration)))
+        start_time = format_time(sum_durations)
+        end_time = format_time(sum_durations + duration)
 
         # Check if the video is from YouTube or from a local file and use corresponding name
         if url.startswith(("http://", "https://")):
             with youtube_dl.YoutubeDL() as ydl:
                 info_dict = ydl.extract_info(url, download=False)
                 video_title = info_dict.get('title', None)
-            timestamps[video_title] = [start_time_hh_mm_ss, end_time_hh_mm_ss]
+            timestamps[video_title] = [start_time, end_time]
         else:
             video_name = os.path.basename(video_path)
-            timestamps[video_name] = [start_time_hh_mm_ss, end_time_hh_mm_ss]
+            timestamps[video_name] = [start_time, end_time]
 
         sum_durations += duration
 

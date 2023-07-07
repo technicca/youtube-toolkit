@@ -7,7 +7,6 @@ import requests
 from io import BytesIO
 from PIL import Image
 import mimetypes
-import datetime
 
 def get_youtube_video_id(url):
     pattern = r"(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})"
