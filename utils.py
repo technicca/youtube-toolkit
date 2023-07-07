@@ -7,7 +7,7 @@ import requests
 from io import BytesIO
 from PIL import Image
 import mimetypes
-from generate_timestaps import main as generate_timestaps
+import datetime
 
 def get_youtube_video_id(url):
     pattern = r"(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})"
@@ -58,34 +58,3 @@ def generate_video(audio_path: str, image_url: str, output_path: str, loop: bool
         img_clip = ImageClip("temp/image.png")
 
     img_clip.set_duration(audio.duration).set_audio(audio).write_videofile(output_path, codec='libx264', fps=24)
-
-def main():
-    default_video_urls = ["https://youtu.be/1O0yazhqaxs", "https://youtu.be/TK4N5W22Gts"]
-    file_path = 'input/input.txt'
-    
-    if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
-        with open(file_path, 'r') as file:
-            video_urls = [line.strip() for line in file.readlines()]
-    else:
-        video_urls = default_video_urls
-    
-    image_url = "https://i.imgur.com/4EmycCc.jpeg"
-    output_path = "output/test.mp4"
-
-    video_paths = []
-    for url in video_urls:
-        if url.startswith(("http://", "https://")):
-            video_id = get_youtube_video_id(url)
-            video_path = f'temp/{video_id}.webm'
-            if not os.path.isfile(video_path):
-                video_path = download_video(url)
-        else:
-            video_path = os.path.join('input', url)
-        video_paths.append(video_path)
-
-    audio_path = merge_audios(video_paths)
-    generate_video(audio_path, image_url, output_path, loop=True)
-    
-    generate_timestaps()
-if __name__ == "__main__":
-    main()
