@@ -11,12 +11,14 @@ import re
 import requests
 from io import BytesIO
 from PIL import Image
-
+import mimetypes
 
 def get_youtube_video_id(url):
     # Extract video id from URL
-    match = re.search(r"youtube\.com/.*v=([^&]*)", url)
-    return match.group(1)
+    pattern = r"(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})"
+    match = re.search(pattern, url)
+    return match.group(1) if match else None
+
 
 def download_video(url: str, output_path: str = "."):
     ydl_opts = {'outtmpl': f'{output_path}/%(id)s.%(ext)s'}
@@ -41,10 +43,12 @@ def merge_audios(video_paths: list[str]):
     combined.export("/merged_audio.mp3", format='mp3')
     return "/merged_audio.mp3"
 
+def is_gif_or_video(file_url: str) -> bool:
+    mimetype, _ = mimetypes.guess_type(file_url)
+    if mimetype:
+        return mimetype.startswith(('video', 'image/gif'))
+    return False
 
-def is_gif_or_video(image_url: str) -> bool:
-    # Checks file extension, returns True if .gif or .mp4
-    return image_url.lower().endswith(('.gif', '.mp4'))
 
 def generate_video(audio_path: str, image_url: str, output_path: str, loop: bool = False):
     audio = AudioFileClip(audio_path)
@@ -63,24 +67,41 @@ def generate_video(audio_path: str, image_url: str, output_path: str, loop: bool
 
     img_clip.set_duration(audio.duration).set_audio(audio).write_videofile(output_path, codec='libx264', fps=24)
 
-
-
-
 def main():
-    video_urls = [
+    # Default URLs
+    default_video_urls = [
         "https://youtu.be/1O0yazhqaxs",
         "https://youtu.be/TK4N5W22Gts"
     ]
-    image_url = "https://i.imgur.com/17djyaF.mp4"
+
+    # File path
+    file_path = 'input/input.txt'
+
+    # Check if the file exists and is not empty
+    if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
+        with open(file_path, 'r') as file:
+            video_urls = [os.path.join('input', line.strip()) for line in file.readlines()]
+    else:
+        # If file doesn't exist or is empty, use default URLs
+        video_urls = default_video_urls
+
+    image_url = "https://i.imgur.com/4EmycCc.jpeg"
     output_path = "test.mp4"
 
     video_paths = []
     for url in video_urls:
-        video_path = download_video(url.strip())
+        if url.startswith(("http://", "https://")):
+            video_id = get_youtube_video_id(url)
+            video_path = f'{video_id}.mp4'
+            if not os.path.isfile(video_path):
+                video_path = download_video(url)
+        else:
+            video_path = url
         video_paths.append(video_path)
 
     audio_path = merge_audios(video_paths)
     generate_video(audio_path, image_url, output_path, loop=True)
+
 
 if __name__ == "__main__":
     main()
