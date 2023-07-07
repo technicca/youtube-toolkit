@@ -1,0 +1,10 @@
+youtube_dl
+pydub
+moviepy
+google-api-python-client
+google-auth-oauthlib
+google-auth-httplib2
+yt-dlp
+requests
+Pillow
+simple-youtube-api
