@@ -4,3 +4,7 @@ credentials.storage
 workflow.txt
 downloads
 output
+*.webm
+*.mp4
+*.png
+prompt.txt

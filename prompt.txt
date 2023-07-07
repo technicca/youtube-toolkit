@@ -1,0 +1,1 @@
+My code is supposed to download a video from youtube/take it from a local path (it should detect which one to use automatically and prioritize input/input.txt file) and then combine videos together, keep the audio and replace video with gif/image/video of my choice. But I get an error:

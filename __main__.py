@@ -76,15 +76,15 @@ def main():
 
     # File path
     file_path = 'input/input.txt'
-
+    
     # Check if the file exists and is not empty
     if os.path.exists(file_path) and os.path.getsize(file_path) > 0:
         with open(file_path, 'r') as file:
-            video_urls = [os.path.join('input', line.strip()) for line in file.readlines()]
+            video_urls = [line.strip() for line in file.readlines()]
     else:
         # If file doesn't exist or is empty, use default URLs
         video_urls = default_video_urls
-
+    
     image_url = "https://i.imgur.com/4EmycCc.jpeg"
     output_path = "test.mp4"
 
@@ -96,12 +96,11 @@ def main():
             if not os.path.isfile(video_path):
                 video_path = download_video(url)
         else:
-            video_path = url
+            video_path = os.path.join('input', url)
         video_paths.append(video_path)
 
     audio_path = merge_audios(video_paths)
     generate_video(audio_path, image_url, output_path, loop=True)
-
 
 if __name__ == "__main__":
     main()
