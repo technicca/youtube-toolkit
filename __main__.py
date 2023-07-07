@@ -1,10 +1,5 @@
-import youtube_dl
 from pydub import AudioSegment
 from moviepy.editor import AudioFileClip, ImageClip, VideoFileClip, concatenate_videoclips
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.auth.transport.requests import Request
-from googleapiclient.http import MediaFileUpload
 import yt_dlp as youtube_dl
 import os
 import re

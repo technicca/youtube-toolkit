@@ -1,1 +1,7 @@
 My code is supposed to download a video from youtube/take it from a local path (it should detect which one to use automatically and prioritize input/input.txt file) and then combine videos together, keep the audio and replace video with gif/image/video of my choice. But I get an error:
+
+
+This script creates a video out of multiple videos, I need to generate a text file with timestaps for when each video that was used to generate finak output starts, it should be in this format:
+00:00-02:36 - video 1
+02:36-04:55 - video 2, etc
+Replace video 1,2, etc with the name of the video file if it is a local video, or the name of the youtube video if it is from youtube
