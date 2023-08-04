@@ -6,7 +6,7 @@ channel = Channel()
 channel.login("client_secret.json", "credentials.storage")
 
 # setting up the video that is going to be uploaded
-video = LocalVideo(file_path="test.mp4")
+video = LocalVideo(file_path="output/test.mp4")
 
 # setting snippet
 video.set_title("My Title")
@@ -27,3 +27,4 @@ video.set_public_stats_viewable(True)
 video = channel.upload_video(video)
 print(video.id)
 print(video)
+print(video.url)
