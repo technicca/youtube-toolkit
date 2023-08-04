@@ -1,4 +1,5 @@
 .env
+.vscode
 client_secret.json
 credentials.storage
 workflow.txt
